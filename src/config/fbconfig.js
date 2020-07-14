@@ -10,7 +10,9 @@ const firebaseConfig = {
   storageBucket: "project-management-43b92.appspot.com",
   messagingSenderId: "900108882513",
   appId: "1:900108882513:web:40127cd21f7af719ca9e70",
-  measurementId: "G-SJV75GJTWX"
+  measurementId: "G-SJV75GJTWX",
+  userProfile: 'users',
+  useFirestoreForProfile: true
 };
 
 firebase.initializeApp(firebaseConfig);

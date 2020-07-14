@@ -1,21 +1,49 @@
 import React from 'react'
+import { compose } from 'redux';
+import { connect } from 'react-redux'
+import { firestoreConnect } from 'react-redux-firebase'
+import { Redirect } from 'react-router-dom'
+import moment from 'moment'
 
 const ProjectDetails = (props) => {
-    let id = props.match.params.id;
-    return (
-        <div className="container section project-details">
-            <div className="card z-depth-0">
-                <div className="card-content">
-                    <span className="card-title">Proj Title - {id}</span>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum dolore voluptatibus accusantium corporis vel adipisci a rem architecto unde impedit libero, reiciendis harum laborum atque quis minus cumque repellat cupiditate.</p>
-                </div>
-                <div className="card-action grey lighten-4 grey-text">
-                    <div>Posted by</div>
-                    <div>#rd July, 2020</div>
+    const { project, auth } = props;
+    if (!auth.uid) return <Redirect to='/signIn' />
+    if(project){
+        return (
+            <div className="container section project-details">
+                <div className="card z-depth-0">
+                    <div className="card-content">
+                        <span className="card-title">{ project.title }</span>
+                        <p>{ project.content }</p>
+                    </div>
+                    <div className="card-action grey lighten-4 grey-text">
+                        <div>Posted by {project.authorFirstName +' '+ project.authorLastName} </div>
+                        <div>{moment(project.createdAt.toDate()).calendar()}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
+    else{
+        return(<div className="container center">
+            <p>Loading Project...</p>
+        </div>)
+    }
+    
+}
+const mapStateToProps = (state,ownProps) => {
+    const id = ownProps.match.params.id;
+    const projects = state.firestore.data.projects
+    const project = projects ? projects[id] : null
+    return {
+        project: project,
+        auth: state.firebase.auth
+    }
 }
 
-export default ProjectDetails
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect([
+        { collection: 'projects' }
+    ])
+)(ProjectDetails)
