@@ -26,6 +26,12 @@ const projectReducer = (state = initState, action) => {
         case 'UPDATE_PROJECT_ERROR':
             console.log('proj updated error', action.err);
             return state;
+        case 'RETRIVE_PROJECT':
+            console.log('proj retriveded',action.projectId);
+            return state;
+        case 'RETRIVE_PROJECT':
+            console.log('proj retrive error',action.err);
+            return state;
         default:
             return state;
     }

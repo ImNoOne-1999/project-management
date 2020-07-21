@@ -15,8 +15,7 @@ class UpdateProject extends Component {
     }
     handleSubmit = (e) =>{
         e.preventDefault();
-
-        this.props.updateProject(this.state,this.props.match.id);
+        this.props.updateProject(this.state,this.props.match.params.id);
         this.props.history.push('/');
     }
     render() {
