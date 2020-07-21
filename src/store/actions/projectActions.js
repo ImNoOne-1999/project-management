@@ -19,7 +19,7 @@ export const createProject = (project) => {
 };
 
 export const updateProject = (project,projectId) => {
-    return (dispatch, getState, { getFirestore, getFirebase }) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firestore = getFirestore();
         firestore.collection('projects').doc(projectId).update({
             ...project,
@@ -41,6 +41,22 @@ export const deleteProject = (projectId) => {
             dispatch({type: 'DELETE_PROJECT', projectId });
         }).catch((err) => {
             dispatch({type: 'DELETE_PROJECT_ERROR', err });
+        });
+}
+};
+
+export const getProjectDeltails = (projectId) => {
+    return(dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore();
+        firestore.collection('projects').doc(projectId).get()
+        .then((doc) => {
+            const data = doc.data();
+            return data;
+        })
+        .then(() => {
+            dispatch({type: 'RETRIVE_PROJECT', projectId });
+        }).catch((err) => {
+            dispatch({type: 'RETRIVE_PROJECT_ERROR', err });
         });
 }
 };
