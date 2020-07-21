@@ -36,6 +36,18 @@ exports.projectDeleted = functions.firestore.document('projects/{projectId}')
         return createNotification(notification)
 });
 
+exports.projectUpdated = functions.firestore.document('projects/{projectId}')
+    .onUpdate(doc => {
+        const project = doc.data();
+        const notification = {
+            content: 'Project Updated',
+            user: `${project.authorFirstName} ${project.authorLastName}`,
+            time: admin.firestore.FieldValue.serverTimestamp()
+        }
+
+        return createNotification(notification)
+});
+
 exports.userJoined = functions.auth.user()
     .onCreate(user => {
         return admin.firestore().collection('users').doc(user.uid)
@@ -45,8 +57,7 @@ exports.userJoined = functions.auth.user()
                     content: 'New User Joined',
                     user: `${newUser.firstName} ${newUser.lastName}`,
                     time: admin.firestore.FieldValue.serverTimestamp()
-                }
-
-                return createNotification(notification)
-            })
-    });
+            }
+        return createNotification(notification)
+    })
+});
