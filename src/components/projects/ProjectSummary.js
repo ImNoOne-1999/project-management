@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { deleteProject,updateProject } from '../../store/actions/projectActions';
 
 const ProjectSummary = (props) => {
-    const { project } = props;
+    const { project,auth } = props;
     return(
         <div className="card z-depth-3 project-summary">
             <div className="card-content grey-text text-darken-3">
@@ -15,7 +15,7 @@ const ProjectSummary = (props) => {
                 <p>Posted By: {project.authorFirstName +' '+ project.authorLastName }</p>
                 <p className="grey-text">{moment(project.createdAt.toDate()).calendar()}</p>
                 <div>
-                    <NavLink to={'/update/projects/'+project.id}><button className="btn pink lightrn-1 z-depth-1" >
+                    <NavLink to={'/update/users/'+auth.uid+'/projects/'+project.id}><button className="btn pink lightrn-1 z-depth-1" >
                         Edit
                     </button></NavLink>
                     <button className="btn right pink lightrn-1 z-depth-1" onClick={() => { props.deleteProject(project.id);console.log(project.id) }}>
@@ -26,6 +26,9 @@ const ProjectSummary = (props) => {
         </div>
     )
 }
+const mapStateToProps = (state) => {
+    return{auth: state.firebase.auth}
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -35,4 +38,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null,mapDispatchToProps)(ProjectSummary)
+export default connect(mapStateToProps,mapDispatchToProps)(ProjectSummary)

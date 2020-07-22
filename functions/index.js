@@ -37,8 +37,9 @@ exports.projectDeleted = functions.firestore.document('projects/{projectId}')
 });
 
 exports.projectUpdated = functions.firestore.document('projects/{projectId}')
-    .onUpdate(doc => {
-        const project = doc.data();
+    .onUpdate((doc,eventContext) => {
+        const project = doc.after.data();
+        console.log(eventContext.params);
         const notification = {
             content: 'Project Updated',
             user: `${project.authorFirstName} ${project.authorLastName}`,
